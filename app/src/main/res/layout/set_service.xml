@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.49">
+
+        <TextView
+            android:id="@+id/service_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="18dp"
+            android:text="Title" />
+        <EditText
+            android:id="@+id/set_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/service_title"
+            android:layout_alignBottom="@+id/service_title"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="8dp"
+            android:layout_toRightOf="@+id/service_title"
+            android:singleLine="true" />
+
+        <TextView
+            android:id="@+id/username_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/set_title"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="18dp"
+            android:text="Username" />
+
+        <EditText
+            android:id="@+id/set_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/username_hint"
+            android:layout_alignBottom="@+id/username_hint"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="8dp"
+            android:layout_toRightOf="@+id/username_hint"
+            android:singleLine="true" />
+
+        <TextView
+            android:id="@+id/password_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/set_username"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="18dp"
+            android:text="Password" />
+
+
+        <EditText
+            android:id="@+id/set_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/password_hint"
+            android:layout_alignBottom="@+id/password_hint"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="8dp"
+            android:layout_toRightOf="@+id/password_hint"
+            android:inputType="textPassword"
+            android:singleLine="true" />
+
+        <Button
+            android:id="@+id/showBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/set_password"
+            android:layout_marginRight="8dp"
+            android:layout_centerHorizontal="true"
+            android:text="Show" />
+
+        <Button
+            android:id="@+id/addButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/set_password"
+            android:layout_alignRight="@+id/set_password"
+            android:layout_below="@+id/showBtn"
+            android:layout_marginEnd="23dp"
+            android:layout_marginRight="23dp"
+            android:layout_marginTop="16dp"
+            android:text="Add" />
+
+        <Button
+            android:id="@+id/cancelBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/addButton"
+            android:layout_marginRight="8dp"
+            android:layout_centerHorizontal="true"
+            android:text="Cancel" />
+
+
+    </RelativeLayout>
+</LinearLayout>

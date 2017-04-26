@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.abdullahhashmi.passwordmanager.ServicesActivity">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="414dp">
+
+
+
+        <TableLayout
+
+            android:id="@+id/tableLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_centerHorizontal="true"
+            android:stretchColumns="0,1,2">
+
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/titleText"
+                    android:layout_column="0"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:text="Title"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:id="@+id/usernameText"
+                    android:layout_column="1"
+                    android:layout_weight="1"
+                    android:text="Username"
+                    android:textColor="@android:color/black"></TextView>
+
+                <TextView
+                    android:id="@+id/passwordText"
+                    android:layout_column="2"
+                    android:layout_weight="1"
+                    android:text="Password"
+                    android:textColor="@android:color/black"></TextView>
+            </TableRow>
+        </TableLayout>
+
+        <Button
+            android:id="@+id/addBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="31dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginRight="25dp"
+            android:text="Add" />
+
+
+    </RelativeLayout>
+</LinearLayout>
