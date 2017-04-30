@@ -37,14 +37,23 @@
                     android:layout_column="1"
                     android:layout_weight="1"
                     android:text="Username"
-                    android:textColor="@android:color/black"></TextView>
+                    android:textColor="@android:color/black" />
 
                 <TextView
                     android:id="@+id/passwordText"
                     android:layout_column="2"
                     android:layout_weight="1"
                     android:text="Password"
-                    android:textColor="@android:color/black"></TextView>
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:id="@+id/showPass"
+                    android:layout_column="2"
+                    android:layout_weight="1"
+                    android:text="Show"
+                    android:textColor="@android:color/black" />
+
+
             </TableRow>
         </TableLayout>
 

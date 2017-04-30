@@ -73,22 +73,48 @@ public class ServicesActivity extends AppCompatActivity {
             {
                 TableRow row = new TableRow(this);
 
-                TextView nTitle, nUsername, nPassword;
+                String password = "";
+                final TextView nTitle, nUsername, nPassword;
+                Button show;
                 nTitle = new TextView(this);
                 nUsername = new TextView(this);
                 nPassword = new TextView(this);
+                show = new Button(this);
 
                 nTitle.setText(rec.getTitle().toString());
                 List<RecordData> recs = rec.getRecordData();
                 for(RecordData data : recs)
                 {
                     nUsername.setText(data.getUsername().toString());
-                    nPassword.setText(data.getPassword().toString());
+                    password = data.getPassword().toString();
+                    nPassword.setText("**********");
                 }
+                show.setText("Show");
+
+                final String pass = password;
+
 
                 row.addView(nTitle);
                 row.addView(nUsername);
                 row.addView(nPassword);
+                row.addView(show);
+
+                show.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        if(event.getAction() == MotionEvent.ACTION_UP) {
+                            nPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                            nPassword.setText(pass);
+                            return true;
+                        }
+                        else {
+                            nPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                            nPassword.setText(pass);
+                            return true;
+                        }
+                    }
+                });
+
 
                 table.addView(row);
 
