@@ -50,7 +50,7 @@
                     android:id="@+id/showPass"
                     android:layout_column="2"
                     android:layout_weight="1"
-                    android:text="Show"
+                    android:text=""
                     android:textColor="@android:color/black" />
 
 
