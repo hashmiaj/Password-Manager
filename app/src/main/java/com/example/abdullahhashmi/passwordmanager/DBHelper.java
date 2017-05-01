@@ -24,7 +24,7 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         try {
-            db.execSQL("CREATE TABLE APP_SETTINGS (PATTERN VARCHAR(255) NOT NULL);");
+            db.execSQL("CREATE TABLE APP_SETTINGS (MASTERPASS VARCHAR(255) NOT NULL);");
             db.execSQL("CREATE TABLE RECORDS (ID INTEGER PRIMARY KEY AUTOINCREMENT, TITLE VARCHAR(60) NOT NULL, USERNAME VARCHAR(60) NOT NULL, PASSWORD VARCHAR(60) NOT NULL);");
         } catch(SQLException e) {
             Toast.makeText(context, "Error Setting Up Database", Toast.LENGTH_SHORT).show();

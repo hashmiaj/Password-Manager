@@ -1,7 +1,11 @@
 package com.example.abdullahhashmi.passwordmanager;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,13 +16,23 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
+    private Context context;
+    private DBHelper dbHandler;
+    private Crypter crypter;
+    private SQLiteDatabase database;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final Context context = this;
+        context = MainActivity.this;
+        dbHandler = new DBHelper(context);
         TextView login1 = (TextView)findViewById(R.id.textView);
         final EditText password = (EditText)findViewById(R.id.editText);
+
+        setMasterPass("000000");
+        crypter = new Crypter("000000ABCDEFGHIJKLMNOPQRST");
+        //context.deleteDatabase("DATABASE");
 
         Button key1 =(Button)findViewById(R.id.key1) ;
         key1.setOnClickListener(new View.OnClickListener() {
@@ -128,18 +142,97 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                if(password.getText().toString().equals("0000")) {
+                String passEntered = password.getText().toString();
+                String masterPass = getMasterPass().substring(0,6);
+
+                if(passEntered.equals(masterPass))
+                {
                     Intent intent = new Intent(MainActivity.this, ServicesActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("masterPass", password.getText().toString());
+                    intent.putExtras(bundle);
                     startActivity(intent);
                 }
                 else
                 {
                     Toast.makeText(context, "Wrong login! Try again." , Toast.LENGTH_SHORT).show();
                 }
-
             }
         } );
 
+    }
+
+    private String getMasterPass() {
+        DBHelper dbHandler = new DBHelper(MainActivity.this);
+        SQLiteDatabase database = dbHandler.openDB(false);
+        String masterPass = "";
+        String password = "";
+        try {
+            Cursor x = database.query("APP_SETTINGS",new String[] {"MASTERPASS"},null,null,null,null,null);
+            if(x.moveToFirst()) {
+                masterPass = x.getString(0);
+            }
+            else {
+                masterPass = null;
+            }
+            x.close();
+        } catch (SQLiteException e) {
+            Toast.makeText(MainActivity.this, "Error getting masterPass" , Toast.LENGTH_SHORT).show();
+        }
+        dbHandler.closeDB();
+
+        try
+        {
+            password = crypter.decrypt(masterPass);
+        }
+        catch(Exception e)
+        {
+            Toast.makeText(MainActivity.this, "Error decrypting" , Toast.LENGTH_SHORT).show();
+        }
+
+        return password;
+    }
+
+    public boolean setMasterPass(String password)
+    {
+        Crypter crypter;
+        Context context = this;
+        long success = -1;
+
+        if(password == null)
+        {
+            password = "000000ABCDEFGHIJKLMNOPQRST";
+            crypter = new Crypter(password);
+            try {
+                ContentValues pushData = new ContentValues();
+                pushData.put("MASTERPASS", crypter.encrypt(password));
+                database = dbHandler.openDB(true);
+                try
+                {
+                    success = database.insertOrThrow("APP_SETTINGS", null, pushData);
+                }
+                catch(SQLiteException e)
+                {
+                    for(int i = 0; i < 100; i++) {
+                        Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show();
+                    }
+
+                }
+                dbHandler.closeDB();
+
+            }
+            catch (Exception e)
+            {
+                Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show();
+            }
+
+        }
+        else
+        {
+            password = password + "ABCDEFGHIJKLMNOPQRST";
+        }
+
+        return success != -1;
     }
 }
 

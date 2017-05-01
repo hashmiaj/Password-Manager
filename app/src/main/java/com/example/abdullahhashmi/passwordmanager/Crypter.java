@@ -20,8 +20,8 @@ public class Crypter
 {
     private Key key;
 
-    public Crypter(String pattern) {
-        String key_string = pattern.substring(10,26);
+    public Crypter(String masterPass) {
+        String key_string = masterPass.substring(10,26);
         byte[] keyBytes = key_string.getBytes(Charset.forName("UTF-8"));
         key = new SecretKeySpec(keyBytes, "AES");
     }

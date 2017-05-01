@@ -36,7 +36,7 @@ public class ServicesActivity extends AppCompatActivity {
     private Crypter crypter;
     private Context context;
     private TableLayout table;
-    private String pattern = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private String masterPass = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 
     @Override
@@ -46,7 +46,7 @@ public class ServicesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_services);
         context = ServicesActivity.this;
         dbHandler = new DBHelper(context);
-        crypter = new Crypter(pattern);
+        crypter = new Crypter(masterPass);
         table = (TableLayout)findViewById(R.id.tableLayout);
 
         Button add = (Button)findViewById(R.id.addBtn);
