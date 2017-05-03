@@ -1,5 +1,6 @@
 package com.example.abdullahhashmi.passwordmanager;
 
+import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -15,24 +16,23 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
-
+public class newLogin extends AppCompatActivity
+{
     private Context context;
     private DBHelper dbHandler;
     private Crypter crypter;
     private SQLiteDatabase database;
-    SharedPreferences data;
-    SharedPreferences.Editor editData;
+    private SharedPreferences data;
+    private SharedPreferences.Editor editData;
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        context = MainActivity.this;
+        setContentView(R.layout.activity_new_login);
+        context = newLogin.this;
         dbHandler = new DBHelper(context);
-        TextView login1 = (TextView)findViewById(R.id.textView);
-        final EditText password = (EditText)findViewById(R.id.editText);
-
         data = getSharedPreferences("allValues", Context.MODE_PRIVATE);
         editData = data.edit();
 
@@ -40,9 +40,11 @@ public class MainActivity extends AppCompatActivity {
 
         setMasterPass(master);
 
+
         crypter = new Crypter(master + "ABCDEFGHIJKLMNOPQRST");
 
-        //context.deleteDatabase("DATABASE");
+        TextView login1 = (TextView)findViewById(R.id.textView);
+        final EditText password = (EditText)findViewById(R.id.editText);
 
         Button key1 =(Button)findViewById(R.id.key1) ;
         key1.setOnClickListener(new View.OnClickListener() {
@@ -146,16 +148,6 @@ public class MainActivity extends AppCompatActivity {
             }
         } );
 
-        Button setNewLogin = (Button)findViewById(R.id.setNewLogin);
-        setNewLogin.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                Intent intent = new Intent(MainActivity.this, newLogin.class);
-                startActivity(intent);
-            }
-        });
 
         Button submit =(Button)findViewById(R.id.submit) ;
         submit.setOnClickListener(new View.OnClickListener() {
@@ -166,11 +158,30 @@ public class MainActivity extends AppCompatActivity {
 
                 String passEntered = password.getText().toString();
 
-                if(passEntered.length() == 6) {
+                if(passEntered.length() >= 6) {
 
                     if (passEntered.equals(master)) {
-                        Intent intent = new Intent(MainActivity.this, ServicesActivity.class);
-                        startActivity(intent);
+                        final Dialog dialog = new Dialog(context);
+                        dialog.setContentView(R.layout.set_new_login);
+                        final EditText login = (EditText)dialog.findViewById(R.id.editText);
+                        Button submitBtn = (Button)dialog.findViewById(R.id.submit);
+                        dialog.show();
+
+                        submitBtn.setOnClickListener(new View.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(View v)
+                            {
+                                String newLogin = login.getText().toString();
+                                setMasterPass(newLogin);
+                                editData.putString("masterPass", newLogin);
+                                editData.commit();
+                                Intent intent = new Intent(newLogin.this, MainActivity.class);
+
+                                startActivity(intent);
+                            }
+                        });
+
 
                     } else {
                         Toast.makeText(context, "Wrong login! Try again.", Toast.LENGTH_SHORT).show();
@@ -185,8 +196,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     private String getMasterPass() {
-        DBHelper dbHandler = new DBHelper(MainActivity.this);
+        DBHelper dbHandler = new DBHelper(newLogin.this);
         SQLiteDatabase database = dbHandler.openDB(false);
         String masterPass = "";
         String password = "";
@@ -200,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
             }
             x.close();
         } catch (SQLiteException e) {
-            Toast.makeText(MainActivity.this, "Error getting masterPass" , Toast.LENGTH_SHORT).show();
+            Toast.makeText(newLogin.this, "Error getting masterPass" , Toast.LENGTH_SHORT).show();
         }
         dbHandler.closeDB();
 
@@ -210,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
         }
         catch(Exception e)
         {
-            Toast.makeText(MainActivity.this, "Error decrypting" , Toast.LENGTH_SHORT).show();
+            Toast.makeText(newLogin.this, "Error decrypting" , Toast.LENGTH_SHORT).show();
         }
 
         return password;
@@ -281,7 +293,4 @@ public class MainActivity extends AppCompatActivity {
         return success != -1;
     }
 
-
-
 }
-

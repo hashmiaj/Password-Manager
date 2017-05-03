@@ -2,19 +2,27 @@ package com.example.abdullahhashmi.passwordmanager;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.graphics.Point;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -75,30 +83,43 @@ public class ServicesActivity extends AppCompatActivity {
 
                 String password = "";
                 final TextView nTitle, nUsername, nPassword;
-                Button show;
+                Button show, delete;
                 nTitle = new TextView(this);
                 nUsername = new TextView(this);
                 nPassword = new TextView(this);
                 show = new Button(this);
+                delete = new Button(this);
+
+
 
                 nTitle.setText(rec.getTitle().toString());
+                final String id = rec.getId().toString();
                 List<RecordData> recs = rec.getRecordData();
                 for(RecordData data : recs)
                 {
                     nUsername.setText(data.getUsername().toString());
                     password = data.getPassword().toString();
-                    nPassword.setText("**********");
+                    nPassword.setText(password);
                 }
                 show.setText("Show");
+                delete.setText("Delete");
 
                 final String pass = password;
 
+                View view_instance = (View)findViewById(R.id.addBtn);
+                ViewGroup.LayoutParams params = view_instance.getLayoutParams();
+                show.setLayoutParams(params);
 
                 row.addView(nTitle);
                 row.addView(nUsername);
                 row.addView(nPassword);
-                row.addView(show);
+                //row.addView(show);
+                row.addView(delete);
 
+
+
+
+                /*
                 show.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
@@ -114,6 +135,47 @@ public class ServicesActivity extends AppCompatActivity {
                         }
                     }
                 });
+                */
+
+                final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                if(deleteRecord(Integer.parseInt(id)))
+                                {
+                                    Toast.makeText(context, "Deleted service" , Toast.LENGTH_SHORT).show();
+                                    loadData();
+                                    finish();
+                                    startActivity(getIntent());
+                                }
+                                else
+                                {
+                                    Toast.makeText(context, "Error deleting service" , Toast.LENGTH_SHORT).show();
+                                }
+                                dialog.dismiss();
+                                finish();
+                                startActivity(getIntent());
+                                break;
+
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //No button clicked
+                                break;
+                        }
+                    }
+                };
+
+                delete.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener)
+                                .setNegativeButton("Cancel", dialogClickListener).show();
+                    }
+                });
+
 
 
                 table.addView(row);
@@ -198,6 +260,17 @@ public class ServicesActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private boolean deleteRecord(int id)
+    {
+        long success = -1;
+        try {
+            SQLiteDatabase database = dbHandler.openDB(true);
+            success = database.delete("RECORDS", "ID=" + id, null);
+        } catch (SQLiteException e) {}
+        dbHandler.closeDB();
+        return success == 1;
     }
 
 
